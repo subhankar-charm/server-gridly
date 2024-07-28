@@ -1,0 +1,27 @@
+services:
+  mongo:
+    container_name: mongoDB
+    env_file:
+      - .env
+    image: mongo
+    ports:
+      - 27018:27017
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+
+  backend: 
+    container_name: server
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - 8080:${PORT}  
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+        
